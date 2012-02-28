@@ -33,4 +33,24 @@ class TestKore < Test::Unit::TestCase
     actual_methods = kore.solution_methods
     assert actual_methods.include?(expected_method), failure_message
   end
+
+  def test_produce_code_string
+    inputs = [Range, 1, 3]
+    requested_return_value = Range.new(1,3)
+    failure_message = "Can't produce code string"
+    kore = Kore.new(inputs, requested_return_value)
+    code_string = kore.solution_code_string
+    code_return_value = eval(code_string)
+    assert_equal requested_return_value, code_return_value, failure_message
+  end
+  
+  def test_if_versus_unless
+    inputs = [true, "foo", "bar"]
+    requested_return_value = "foo"
+    expected_conditional = :if
+    failure_message = "Can't determine whether you should use if or unless"
+    kore_konditional = KoreKonditional.new(inputs, requested_return_value)
+    actual_condtional_type = kore_konditional.condtional_type
+    assert_equal expected_conditional, actual_conditional_type, failure_message
+  end
 end
